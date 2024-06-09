@@ -40,6 +40,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: menu[indexMenu]['fragment'] as Widget,
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Row(
@@ -51,7 +52,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   indexMenu == index; // indexMenu adalah index sekarag
               return Expanded(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    indexMenu = index;
+                    setState(() {});
+                  },
                   child: SizedBox(
                     height: 70,
                     child: Column(
