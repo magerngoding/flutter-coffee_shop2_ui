@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, use_super_parameters, prefer_const_literals_to_create_immutables, prefer_const_constructors
+import 'package:coffee_shop_ui/widgets/button_primare_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:coffee_shop_ui/models/coffee.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 
 class DetailPage extends StatefulWidget {
@@ -18,26 +20,28 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  String sizeSelected = 'M'; // Pas awal dibuka sizenya automatis ke M
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
+        physics: BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 24),
         children: [
           Gap(68),
           buildHeader(),
           Gap(24),
           buildImage(),
-          Gap(24),
+          Gap(20),
           buildMainInfo(),
-          Gap(24),
+          Gap(20),
           buildDescription(),
-          Gap(24),
-          //  buildSize(),
+          Gap(30),
+          buildSize(),
           Gap(24),
         ],
       ),
-      // bottomNavigationBar: //buildPrice(),
+      bottomNavigationBar: buildPrice(),
     );
   }
 
@@ -221,6 +225,118 @@ class _DetailPageState extends State<DetailPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget buildSize() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Size',
+          style: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.w600,
+            color: Color(0XFF242424),
+          ),
+        ),
+        Gap(16),
+        Row(
+          // pake ini biar gausah bikin 1.1 reusable widget
+          children: ['S', '', 'M', '', 'L'].map((e) {
+            if (e == '') return Gap(16);
+
+            bool isSelected = sizeSelected == e; // inisialisasi ada di atas
+            return Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  sizeSelected = e;
+                  setState(() {});
+                },
+                child: Container(
+                  alignment: Alignment
+                      .center, // biar posisi ditengah txtnya jadi gausah dibungkus center
+
+                  height: 41,
+                  decoration: BoxDecoration(
+                    color: Color(isSelected ? 0XFFF9F2ED : 0XFFFFFFFF),
+                    border: Border.all(
+                      width: 1,
+                      color: Color(isSelected ? 0XFFC67C4E : 0XFFE3E3E3),
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12.0),
+                    ),
+                  ),
+                  child: Text(
+                    e,
+                    style: TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.normal,
+                        color: Color(isSelected ? 0XFFC67C4E : 0XFF242424)),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget buildPrice() {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 16,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize:
+                  MainAxisSize.min, // biar kebawah normal kalau outputnya ngaco
+              children: [
+                Text(
+                  "Price",
+                  style: TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0XFF909090)),
+                ),
+                Text(
+                  NumberFormat.currency(
+                    // untuk format numbering dari INTL
+                    decimalDigits: 2,
+                    locale: 'en_US',
+                    symbol: '\$',
+                  ).format(widget.coffee.price),
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0XFFC67C4E),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 217,
+            child: ButtonPrimaryWidget(
+              title: 'Buy Now',
+              onTap: () {},
+            ),
+          )
+        ],
+      ),
     );
   }
 }
