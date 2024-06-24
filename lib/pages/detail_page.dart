@@ -28,7 +28,7 @@ class _DetailPageState extends State<DetailPage> {
         physics: BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 24),
         children: [
-          Gap(68),
+          Gap(60),
           buildHeader(),
           Gap(24),
           buildImage(),
